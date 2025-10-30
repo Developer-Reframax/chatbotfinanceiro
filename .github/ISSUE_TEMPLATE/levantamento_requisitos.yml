@@ -1,0 +1,23 @@
+name: Levantamento de Requisitos
+description: Registro e análise de requisitos iniciais do projeto
+title: "[REQ] - "
+labels: ["levantamento"]
+body:
+  - type: input
+    id: objetivo
+    attributes:
+      label: Objetivo do requisito
+  - type: textarea
+    id: descricao
+    attributes:
+      label: Descrição detalhada
+  - type: input
+    id: aprovador
+    attributes:
+      label: Aprovador responsável
+  - type: checkboxes
+    id: validacao
+    attributes:
+      label: Validação
+      options:
+        - label: Requisito validado
