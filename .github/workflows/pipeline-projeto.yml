@@ -1,0 +1,38 @@
+name: Pipeline Projeto
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  desenvolvimento:
+    runs-on: ubuntu-latest
+    environment: developer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Build e Testes
+        run: npm run build && npm run test
+
+  validacao:
+    needs: desenvolvimento
+    runs-on: ubuntu-latest
+    environment: validate
+    steps:
+      - name: Aguardando aprovação do gerente
+        run: echo "Aguardando aprovação manual via ambiente Validacao"
+
+  entrega:
+    needs: validacao
+    runs-on: ubuntu-latest
+    environment: delivery
+    steps:
+      - name: Entrega final
+        run: echo "Deploy ou entrega concluída com sucesso"
