@@ -1,0 +1,60 @@
+name: Pipeline do Projeto
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  levantamento:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Levantamento de requisitos
+      - run: echo "Registrando levantamento inicial..."
+
+  configuracao:
+    needs: levantamento
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configuração inicial
+      - run: echo "Configurando ambiente de desenvolvimento..."
+
+  desenvolvimento:
+    needs: configuracao
+    runs-on: ubuntu-latest
+    environment: desenvolvimento
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalar dependências
+        run: npm install
+      - name: Executar testes
+        run: npm test
+
+  validacao:
+    needs: desenvolvimento
+    runs-on: ubuntu-latest
+    environment: validacao   # ambiente protegido com required reviewers
+    steps:
+      - name: Validação e testes manuais
+        run: echo "Aguardando aprovação do Manager antes de continuar..."
+
+  entrega:
+    needs: validacao
+    runs-on: ubuntu-latest
+    environment: entrega
+    steps:
+      - name: Publicar versão final
+        run: echo "Deploy de produção realizado com sucesso."
+
+  pos_entrega:
+    needs: entrega
+    runs-on: ubuntu-latest
+    environment: posentrega
+    steps:
+      - name: Pós-entrega
+        run: echo "Coletando feedbacks e encerrando projeto."
